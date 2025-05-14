@@ -17,34 +17,53 @@ jobs:
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
+    # Step 1: Build Docker image
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest MLProject
 
-    - name: Run modelling.py inside container
+    # Step 2: Run modelling.py (train model and log to MLflow)
+    - name: Run modelling.py inside container (train model)
       run: |
-        docker run --rm -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
+        docker run --rm \
+          -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts \
+          -v ${{ github.workspace }}:/app \
+          ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
+          bash -c "
+            # Install mlflow in case it's not in the image
+            pip install mlflow &&
+            # Run the modelling script to train the model and log to MLflow
+            python /app/MLProject/modelling.py
+          "
 
-    - name: Save run_id as env var
-      id: get_run_id
-      run: echo "RUN_ID=$(cat MLProject/run_id.txt)" >> $GITHUB_ENV
-
-    - name: Download MLflow model artifact
+    # Step 3: Download the model artifact from MLflow using run_id
+    - name: Download MLflow model artifact inside container
       run: |
-        mlflow models download \
-        --run-id $RUN_ID \
-        -d MLProject/artifacts/random_forest_model
+        docker run --rm \
+          -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts \
+          -v ${{ github.workspace }}:/app \
+          ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
+          bash -c "
+            # Install mlflow in case it's not in the image
+            pip install mlflow &&
+            # Get the run_id saved in the artifacts directory
+            RUN_ID=\$(cat /app/artifacts/run_id.txt) &&
+            # Download the model artifact from MLflow
+            mlflow models download --run-id \$RUN_ID -d /app/artifacts/random_forest_model
+          "
 
+    # Step 4: Commit and push model artifact to GitHub
     - name: Commit and push model artifact to GitHub
       run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
         git add MLProject/artifacts/random_forest_model/*
-        git commit -m "Update model artifact from MLflow tracking"
+        git commit -m 'Update model artifact from MLflow tracking'
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Step 5: Push Docker image to Docker Hub
     - name: Push Docker image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
