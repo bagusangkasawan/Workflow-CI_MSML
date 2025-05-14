@@ -25,16 +25,21 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
 
+    - name: Download model artifact from MLflow Tracking
+      run: |
+        # Ensure you have a proper MLflow tracking URI set if necessary
+        mlflow models download -d MLProject/artifacts/random_forest_model --run-id $(mlflow.active_run().info.run_id)
+
     - name: Commit and push model artifact to GitHub
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add MLProject/artifacts/rf_model.joblib
-        git commit -m "Update model joblib artifact"
+        git add MLProject/artifacts/random_forest_model/*
+        git commit -m "Update model artifact from MLflow tracking"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Push Docker image
+    - name: Push Docker image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest

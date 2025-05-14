@@ -10,11 +10,11 @@ COPY . .
 # Install dependencies menggunakan conda.yaml
 RUN conda env create -f conda.yaml
 
-# Set environment untuk menjalankan perintah dalam conda environment
-ENV PATH /opt/conda/envs/mlflow-env/bin:$PATH
+# Pastikan conda environment tersedia
+SHELL ["conda", "run", "-n", "mlflow-env", "/bin/bash", "-c"]
 
 # Menambahkan volume untuk menyimpan model hasil training
 VOLUME /app/artifacts
 
 # Jalankan model training saat container dijalankan
-CMD ["python", "modelling.py"]
+CMD ["conda", "run", "-n", "mlflow-env", "python", "modelling.py"]
