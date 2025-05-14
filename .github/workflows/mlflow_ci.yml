@@ -23,8 +23,7 @@ jobs:
 
     - name: Run Model Training
       run: |
-        conda activate mlflow-env
-        python MLProject/modelling.py
+        conda run -n mlflow-env python MLProject/modelling.py
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
