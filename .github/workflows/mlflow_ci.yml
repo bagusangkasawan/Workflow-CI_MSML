@@ -30,7 +30,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest .
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest MLProject
 
     - name: Push Docker image
       run: |
