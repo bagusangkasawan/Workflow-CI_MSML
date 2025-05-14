@@ -64,3 +64,9 @@ with mlflow.start_run(run_name="Random Forest with Tuning") as run:
 
     mlflow.sklearn.log_model(best_rf_model, artifact_path="random_forest_model")
     print("✅ Model logged to MLflow.")
+
+    artifact_path = os.path.join(os.getcwd(), "artifacts", "random_forest_model")
+    print(f"Downloading model artifact to {artifact_path}...")
+    
+    mlflow.artifacts.download_artifacts(artifact_uri=f"./mlruns/0/{run_id}/artifacts/random_forest_model", dst_path=artifact_path)
+    print("✅ Model artifact downloaded.")

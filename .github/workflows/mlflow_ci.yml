@@ -17,13 +17,11 @@ jobs:
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-    # Step 1: Build Docker image
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest MLProject
 
-    # Step 2: Run modelling.py (train model and log to MLflow)
-    - name: Run modelling.py inside container (train model)
+    - name: Run modelling.py inside container (train model and download artifact)
       run: |
         docker run --rm \
           -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts \
@@ -33,18 +31,6 @@ jobs:
             conda run -n mlflow-env python MLProject/modelling.py
           "
 
-    # Step 3: Download the model artifact from MLflow using run_id
-    - name: Download MLflow model artifact inside container
-      run: |
-        docker run --rm \
-          -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts \
-          -v ${{ github.workspace }}:/app \
-          ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
-          bash -c "
-            conda run -n mlflow-env mlflow models download --run-id \$(cat /app/artifacts/run_id.txt) -d /app/artifacts/random_forest_model
-          "
-
-    # Step 4: Commit and push model artifact to GitHub
     - name: Commit and push model artifact to GitHub
       run: |
         git config user.name 'github-actions'
@@ -55,7 +41,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Step 5: Push Docker image to Docker Hub
     - name: Push Docker image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
