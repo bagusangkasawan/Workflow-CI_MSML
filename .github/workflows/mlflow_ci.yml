@@ -25,10 +25,15 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
 
-    - name: Download model artifact from MLflow Tracking
+    - name: Save run_id as env var
+      id: get_run_id
+      run: echo "RUN_ID=$(cat MLProject/run_id.txt)" >> $GITHUB_ENV
+
+    - name: Download MLflow model artifact
       run: |
-        # Ensure you have a proper MLflow tracking URI set if necessary
-        mlflow models download -d MLProject/artifacts/random_forest_model --run-id $(mlflow.active_run().info.run_id)
+        mlflow models download \
+        --run-id $RUN_ID \
+        -d MLProject/artifacts/random_forest_model
 
     - name: Commit and push model artifact to GitHub
       run: |

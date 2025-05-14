@@ -42,7 +42,10 @@ fp = cm[0][1]
 specificity = tn / (tn + fp)
 f1_class_1 = f1_score(y_test, y_pred, average='macro')
 
-with mlflow.start_run(run_name="Random Forest with Tuning"):
+with mlflow.start_run(run_name="Random Forest with Tuning") as run:
+    run_id = run.info.run_id
+    with open("run_id.txt", "w") as f:
+        f.write(run_id)
     mlflow.log_param("model_type", "Random Forest")
     mlflow.log_param("num_classes", num_classes)
     for param_name, param_value in grid_search.best_params_.items():
