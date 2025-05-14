@@ -1,28 +1,20 @@
-# Gunakan image base yang sudah ada
+# Gunakan base image yang ringan dan support ML
 FROM continuumio/miniconda3:latest
 
-# Set working directory di dalam container
+# Set workdir
 WORKDIR /app
 
-# Salin file environment conda dan project ke dalam container
-COPY conda.yaml /app/conda.yaml
-COPY obesity_data_preprocessing.csv /app/obesity_data_preprocessing.csv
-COPY modelling.py /app/modelling.py
+# Salin semua file dari project ke dalam container
+COPY . .
 
-# Install dependencies menggunakan conda
-RUN conda env create -f /app/conda.yaml
+# Install dependencies menggunakan conda.yaml
+RUN conda env create -f conda.yaml
 
-# Set environment variable untuk mengaktifkan conda environment
+# Set environment untuk menjalankan perintah dalam conda environment
 ENV PATH /opt/conda/envs/mlflow-env/bin:$PATH
 
-# Install Docker dependencies jika diperlukan
-RUN apt-get update && apt-get install -y git
+# Menambahkan volume untuk menyimpan model hasil training
+VOLUME /app/artifacts
 
-# Install mlflow untuk logging
-RUN pip install mlflow
-
-# Install Docker CLI untuk build dan push image jika diperlukan
-RUN apt-get install -y docker.io
-
-# Perintah untuk menjalankan model
+# Jalankan model training saat container dijalankan
 CMD ["python", "modelling.py"]

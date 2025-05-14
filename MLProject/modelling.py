@@ -1,4 +1,5 @@
 import os
+import joblib
 import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
@@ -42,6 +43,9 @@ fp = cm[0][1]
 specificity = tn / (tn + fp)
 f1_class_1 = f1_score(y_test, y_pred, average='macro')
 
+model_path = os.path.join(BASE_DIR, "artifacts", "rf_model.joblib")
+os.makedirs(os.path.dirname(model_path), exist_ok=True)
+
 with mlflow.start_run(run_name="Random Forest with Tuning"):
     mlflow.log_param("model_type", "Random Forest")
     mlflow.log_param("num_classes", num_classes)
@@ -58,3 +62,6 @@ with mlflow.start_run(run_name="Random Forest with Tuning"):
 
     mlflow.sklearn.log_model(best_rf_model, artifact_path="random_forest_model")
     print("✅ Model logged to MLflow.")
+
+    joblib.dump(best_rf_model, model_path)
+    print(f"✅ Model saved locally at {model_path}.")

@@ -14,23 +14,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        activate-environment: mlflow-env
-        environment-file: MLProject/conda.yaml
-        auto-activate-base: false
-
-    - name: Run Model Training
-      run: |
-        conda run -n mlflow-env python MLProject/modelling.py
-
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
     - name: Build Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest MLProject
+
+    - name: Run modelling.py inside container
+      run: |
+        docker run --rm -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
+
+    - name: Commit and push model artifact to GitHub
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add MLProject/artifacts/model.joblib
+        git commit -m "Update model joblib artifact"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push Docker image
       run: |
