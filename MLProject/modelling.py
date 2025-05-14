@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 import pandas as pd
 
 mlflow.set_experiment("Obesity_Classification")
+experiment = mlflow.get_experiment_by_name("Obesity_Classification")
+experiment_id = experiment.experiment_id
 
 BASE_DIR = os.path.dirname(__file__)
 df = pd.read_csv(os.path.join(BASE_DIR, "obesity_data_preprocessing.csv"))
@@ -66,7 +68,6 @@ with mlflow.start_run(run_name="Random Forest with Tuning") as run:
     print("✅ Model logged to MLflow.")
 
     artifact_path = os.path.join(os.getcwd(), "artifacts", "random_forest_model")
-    print(f"Downloading model artifact to {artifact_path}...")
-    
-    mlflow.artifacts.download_artifacts(artifact_uri=f"./mlruns/0/{run_id}/artifacts/random_forest_model", dst_path=artifact_path)
+    artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts/random_forest_model"
+    mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
     print("✅ Model artifact downloaded.")
