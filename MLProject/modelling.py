@@ -46,11 +46,6 @@ f1_class_1 = f1_score(y_test, y_pred, average='macro')
     
 with mlflow.start_run(run_name="Random Forest with Tuning") as run:
     run_id = run.info.run_id
-    artifacts_path = os.path.join(os.getcwd(), "artifacts")
-    os.makedirs(artifacts_path, exist_ok=True)
-    with open(os.path.join(artifacts_path, "run_id.txt"), "w") as f:
-        f.write(run.info.run_id)
-    
     mlflow.log_param("model_type", "Random Forest")
     mlflow.log_param("num_classes", num_classes)
     for param_name, param_value in grid_search.best_params_.items():
@@ -67,7 +62,7 @@ with mlflow.start_run(run_name="Random Forest with Tuning") as run:
     mlflow.sklearn.log_model(best_rf_model, artifact_path="random_forest_model")
     print("✅ Model logged to MLflow.")
 
-    artifact_path = os.path.join(os.getcwd(), "artifacts", "random_forest_model")
+    artifact_path = os.path.join(os.getcwd(), "artifacts")
     artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts/random_forest_model"
     mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
     print("✅ Model artifact downloaded.")
