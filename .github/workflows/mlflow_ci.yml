@@ -30,12 +30,7 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
-            # Inisialisasi conda
-            conda init bash &&
-            # Aktifkan conda environment
-            conda activate mlflow-env &&
-            # Jalankan modelling.py untuk training model dan logging ke MLflow
-            python /app/MLProject/modelling.py
+            conda run -n mlflow-env python MLProject/modelling.py
           "
 
     # Step 3: Download the model artifact from MLflow using run_id
@@ -46,9 +41,7 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
-            # Get the run_id saved in the artifacts directory
             RUN_ID=\$(cat /app/artifacts/run_id.txt) &&
-            # Download the model artifact from MLflow
             mlflow models download --run-id \$RUN_ID -d /app/artifacts/random_forest_model
           "
 
