@@ -21,10 +21,10 @@ jobs:
         environment-file: MLProject/conda.yaml
         auto-activate-base: false
 
-    - name: Run training with MLflow
+    - name: Run Model Training
       run: |
-        cd MLProject
-        mlflow run . --no-conda
+        conda activate mlflow-env
+        python MLProject/modelling.py
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
