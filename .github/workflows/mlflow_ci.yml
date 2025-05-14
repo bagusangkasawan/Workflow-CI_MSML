@@ -30,8 +30,6 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
-            # Install mlflow in case it's not in the image
-            pip install mlflow &&
             # Run the modelling script to train the model and log to MLflow
             python /app/MLProject/modelling.py
           "
@@ -44,8 +42,6 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
-            # Install mlflow in case it's not in the image
-            pip install mlflow &&
             # Get the run_id saved in the artifacts directory
             RUN_ID=\$(cat /app/artifacts/run_id.txt) &&
             # Download the model artifact from MLflow
