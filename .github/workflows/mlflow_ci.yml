@@ -30,6 +30,8 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
+            # Activate the conda environment
+            conda activate mlflow-env &&
             # Run the modelling script to train the model and log to MLflow
             python /app/MLProject/modelling.py
           "
