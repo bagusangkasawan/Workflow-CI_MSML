@@ -1,0 +1,38 @@
+name: MLflow CI
+
+on:
+  push:
+    paths:
+      - 'MLProject/**'
+  workflow_dispatch:
+
+jobs:
+  train-and-log-model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: mlflow-env
+        environment-file: MLProject/conda.yaml
+        auto-activate-base: false
+
+    - name: Run training with MLflow
+      run: |
+        cd MLProject
+        mlflow run . --no-conda
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
