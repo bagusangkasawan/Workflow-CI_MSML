@@ -1,3 +1,4 @@
+import os
 import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
@@ -7,7 +8,8 @@ import pandas as pd
 
 mlflow.set_experiment("Obesity_Classification")
 
-df = pd.read_csv("obesity_data_preprocessing.csv")
+BASE_DIR = os.path.dirname(__file__)
+df = pd.read_csv(os.path.join(BASE_DIR, "obesity_data_preprocessing.csv"))
 X = df.drop("ObesityCategory", axis=1)
 y = df["ObesityCategory"]
 
