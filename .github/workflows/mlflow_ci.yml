@@ -41,8 +41,7 @@ jobs:
           -v ${{ github.workspace }}:/app \
           ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
           bash -c "
-            RUN_ID=\$(cat /app/artifacts/run_id.txt) &&
-            mlflow models download --run-id \$RUN_ID -d /app/artifacts/random_forest_model
+            conda run -n mlflow-env mlflow models download --run-id \$(cat /app/artifacts/run_id.txt) -d /app/artifacts/random_forest_model
           "
 
     # Step 4: Commit and push model artifact to GitHub
