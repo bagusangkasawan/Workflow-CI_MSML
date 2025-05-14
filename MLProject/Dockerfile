@@ -10,10 +10,7 @@ COPY . .
 # Install dependencies menggunakan conda.yaml
 RUN conda env create -f conda.yaml && conda clean -a -y
 
-# Inisialisasi conda untuk shell
-RUN conda init bash
-
-# Pastikan conda environment tersedia dan aktifkan conda environment
+# Pastikan conda environment tersedia
 SHELL ["conda", "run", "-n", "mlflow-env", "/bin/bash", "-c"]
 
 # Menambahkan volume untuk menyimpan model hasil training
