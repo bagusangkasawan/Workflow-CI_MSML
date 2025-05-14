@@ -5,9 +5,9 @@ FROM continuumio/miniconda3:latest
 WORKDIR /app
 
 # Salin file environment conda dan project ke dalam container
-COPY MLProject/conda.yaml /app/conda.yaml
-COPY MLProject/obesity_data_preprocessing.csv /app/obesity_data_preprocessing.csv
-COPY MLProject/modelling.py /app/modelling.py
+COPY conda.yaml /app/conda.yaml
+COPY obesity_data_preprocessing.csv /app/obesity_data_preprocessing.csv
+COPY modelling.py /app/modelling.py
 
 # Install dependencies menggunakan conda
 RUN conda env create -f /app/conda.yaml
