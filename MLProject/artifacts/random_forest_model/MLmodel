@@ -13,9 +13,24 @@ flavors:
     pickled_model: model.pkl
     serialization_format: cloudpickle
     sklearn_version: 1.5.2
+is_signature_from_type_hint: false
 mlflow_version: 2.22.0
-model_size_bytes: 1255295
-model_uuid: 87b7711fc46d42e7911b2985d7ed4036
+model_size_bytes: 1255778
+model_uuid: 75eb96c579964373afd7e902c78d8142
 prompts: null
-run_id: 1abf025db4c04bc1bfecf4b5d054aebd
-utc_time_created: '2025-05-17 18:58:49.812284'
+run_id: 7e8b3da2233841a8851f6dcd77542822
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "Age", "required": true}, {"type": "double",
+    "name": "Gender", "required": true}, {"type": "double", "name": "Height", "required":
+    true}, {"type": "double", "name": "Weight", "required": true}, {"type": "double",
+    "name": "BMI", "required": true}, {"type": "double", "name": "PhysicalActivityLevel",
+    "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-05-17 19:50:05.271660'
