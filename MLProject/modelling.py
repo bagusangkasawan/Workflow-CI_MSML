@@ -66,6 +66,8 @@ with mlflow.start_run(run_name="Random Forest with Tuning") as run:
     print("✅ Model logged to MLflow.")
 
     artifact_path = os.path.join(os.getcwd(), "mlflow")
+    os.makedirs(artifact_path, exist_ok=True)
+    
     artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts"
     mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
     print("✅ Model artifact downloaded.")
