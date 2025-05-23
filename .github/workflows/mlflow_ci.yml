@@ -12,10 +12,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v3
       with:
         python-version: '3.10'
 
@@ -23,24 +23,14 @@ jobs:
       run: |
         pip install mlflow
 
-    - name: Run MLflow project
+    - name: Run MLflow Project
       run: |
-        mlflow run MLProject --env-manager=local
-
-    - name: Commit and push model artifact to GitHub
-      run: |
-        git config user.name 'github-actions'
-        git config user.email 'github-actions@github.com'
-        git add MLProject/artifacts/*
-        git commit -m 'Update model artifact from MLflow tracking'
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        mlflow run MLProject
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-    - name: Build Docker image from MLflow model
+    - name: Build Docker image using MLflow
       run: |
         mlflow models build-docker -m MLProject/artifacts/random_forest_model -n msml-model
 
