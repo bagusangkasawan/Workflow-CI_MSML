@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/0/97503c0f9b0849d1ada5863eb6d19633/artifacts
+end_time: 1748011457479
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 97503c0f9b0849d1ada5863eb6d19633
+run_name: monumental-midge-926
+run_uuid: 97503c0f9b0849d1ada5863eb6d19633
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748011432537
+status: 3
+tags: []
+user_id: runner
