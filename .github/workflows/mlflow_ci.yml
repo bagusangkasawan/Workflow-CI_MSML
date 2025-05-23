@@ -25,7 +25,17 @@ jobs:
 
     - name: Run MLflow Project
       run: |
-        mlflow run MLProject
+        mlflow run MLProject --env-manager=local
+
+    - name: Commit and push model artifact to GitHub
+      run: |
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
+        git add MLProject/artifacts/*
+        git commit -m 'Update model artifact from MLflow tracking'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
