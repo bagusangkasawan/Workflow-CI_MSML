@@ -43,7 +43,7 @@ jobs:
 
     - name: Build Docker image using MLflow
       run: |
-        mlflow models build-docker -m MLProject/artifacts/random_forest_model -n msml-model
+        mlflow models build-docker -m mlruns -n msml-model
 
     - name: Push Docker image to Docker Hub
       run: |
