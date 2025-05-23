@@ -42,7 +42,7 @@ jobs:
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
     - name: Build Docker image from registered model
-      run: mlflow models build-docker -m models:/msml-model/1 -n msml-model
+      run: mlflow models build-docker -m random_forest_model -n msml-model
 
     - name: Push Docker image to Docker Hub
       run: |
