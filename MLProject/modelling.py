@@ -63,7 +63,7 @@ mlflow.sklearn.log_model(
 )
 print("✅ Model logged to MLflow.")
 
-artifact_path = os.path.join(os.getcwd(), "MLProject", "artifacts")
+artifact_path = os.path.join(os.getcwd(), "artifacts")
 artifact_uri=f"./mlruns/{experiment_id}/None/artifacts/"
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")
