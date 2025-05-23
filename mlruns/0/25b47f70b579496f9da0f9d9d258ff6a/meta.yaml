@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/0/25b47f70b579496f9da0f9d9d258ff6a/artifacts
+end_time: 1748013862029
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 25b47f70b579496f9da0f9d9d258ff6a
+run_name: unequaled-bat-217
+run_uuid: 25b47f70b579496f9da0f9d9d258ff6a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748013836409
+status: 3
+tags: []
+user_id: runner
