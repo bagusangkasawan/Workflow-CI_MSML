@@ -1,8 +1,7 @@
-name: msml-obesity-classification
-
-conda_env: conda.yaml
+name: obesity-classification
 
 entry_points:
   main:
-    parameters: {}
+    parameters:
+      run_name: {type: str, default: "Random Forest with Tuning"}
     command: "python modelling.py"
