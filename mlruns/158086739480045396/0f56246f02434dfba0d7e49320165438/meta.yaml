@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/158086739480045396/0f56246f02434dfba0d7e49320165438/artifacts
+end_time: 1748014244464
+entry_point_name: ''
+experiment_id: '158086739480045396'
+lifecycle_stage: active
+run_id: 0f56246f02434dfba0d7e49320165438
+run_name: inquisitive-loon-737
+run_uuid: 0f56246f02434dfba0d7e49320165438
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748014240962
+status: 3
+tags: []
+user_id: runner

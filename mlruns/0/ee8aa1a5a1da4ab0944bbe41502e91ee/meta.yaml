@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/0/ee8aa1a5a1da4ab0944bbe41502e91ee/artifacts
+end_time: 1748014244866
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ee8aa1a5a1da4ab0944bbe41502e91ee
+run_name: respected-panda-726
+run_uuid: ee8aa1a5a1da4ab0944bbe41502e91ee
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748014220117
+status: 3
+tags: []
+user_id: runner
