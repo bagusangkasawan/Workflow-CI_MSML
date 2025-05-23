@@ -3,12 +3,15 @@ import mlflow
 import mlflow.sklearn
 from mlflow.models.signature import infer_signature
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, confusion_matrix, f1_score
 from sklearn.model_selection import train_test_split, GridSearchCV
 import pandas as pd
 
 mlflow.set_experiment("Obesity_Classification")
 mlflow.sklearn.autolog(log_models=False)
+
+experiment = mlflow.get_experiment_by_name("Obesity_Classification")
+experiment_id = experiment.experiment_id
 
 BASE_DIR = os.path.dirname(__file__)
 df = pd.read_csv(os.path.join(BASE_DIR, "obesity_data_preprocessing.csv"))
@@ -28,8 +31,7 @@ rf_model = RandomForestClassifier(random_state=42)
 grid_search = GridSearchCV(estimator=rf_model, param_grid=rf_param_grid, cv=3, n_jobs=-1, verbose=2)
 
 run = mlflow.active_run()
-run_id = run.info.run_id
-experiment_id = run.info.experiment_id
+run_id = run.info.run_id if run else None
 
 grid_search.fit(X_train, y_train)
 best_rf_model = grid_search.best_estimator_
@@ -55,17 +57,16 @@ mlflow.log_metric("f1_class_1", f1_class_1)
 
 input_example = X_train.iloc[:1].astype("float64")
 signature = infer_signature(X_train.astype("float64"), best_rf_model.predict(X_train))
-
+    
 mlflow.sklearn.log_model(
     sk_model=best_rf_model,
     artifact_path="random_forest_model",
     input_example=input_example,
     signature=signature
 )
-
 print("✅ Model logged to MLflow.")
 
-artifact_path = os.path.join(os.getcwd(), "artifacts")
-artifact_uri = f"runs:/{run_id}/random_forest_model"
+artifact_path = os.path.join(os.getcwd(), "MLProject", "artifacts")
+artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts/"
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")
