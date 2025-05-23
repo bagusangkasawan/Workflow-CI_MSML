@@ -57,7 +57,6 @@ def main():
         input_example=input_example,
         signature=signature
     )
-
     print("✅ Model logged to MLflow.")
 
     model_uri = mlflow.get_artifact_uri("random_forest_model")
