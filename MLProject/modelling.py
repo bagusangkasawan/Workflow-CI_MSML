@@ -1,4 +1,5 @@
 import os
+import shutil
 import mlflow
 import mlflow.sklearn
 from mlflow.models.signature import infer_signature
@@ -64,6 +65,9 @@ mlflow.sklearn.log_model(
 print("✅ Model logged to MLflow.")
 
 artifact_path = os.path.join(os.getcwd(), "artifacts")
+if os.path.exists(artifact_path):
+    shutil.rmtree(artifact_path)
+
 artifact_uri=f"./artifacts/"
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")
