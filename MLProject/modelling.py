@@ -60,5 +60,8 @@ def main():
 
     print("✅ Model logged to MLflow.")
 
+    model_uri = mlflow.get_artifact_uri("random_forest_model")
+    mlflow.register_model(model_uri=model_uri, name="msml-model")
+
 if __name__ == "__main__":
     main()
