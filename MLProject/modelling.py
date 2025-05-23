@@ -11,9 +11,6 @@ import pandas as pd
 mlflow.set_experiment("Obesity_Classification")
 mlflow.sklearn.autolog(log_models=False)
 
-experiment = mlflow.get_experiment_by_name("Obesity_Classification")
-experiment_id = experiment.experiment_id
-
 BASE_DIR = os.path.dirname(__file__)
 df = pd.read_csv(os.path.join(BASE_DIR, "obesity_data_preprocessing.csv"))
 X = df.drop("ObesityCategory", axis=1)
@@ -65,9 +62,10 @@ mlflow.sklearn.log_model(
 print("✅ Model logged to MLflow.")
 
 artifact_path = os.path.join(os.getcwd(), "artifacts")
+artifact_uri=f"./artifacts/"
+
 if os.path.exists(artifact_path):
     shutil.rmtree(artifact_path)
-
-artifact_uri=f"./artifacts/"
+    
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")
