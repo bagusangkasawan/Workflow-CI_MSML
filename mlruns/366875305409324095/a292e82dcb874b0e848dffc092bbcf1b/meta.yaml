@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/366875305409324095/a292e82dcb874b0e848dffc092bbcf1b/artifacts
+end_time: 1748012571485
+entry_point_name: ''
+experiment_id: '366875305409324095'
+lifecycle_stage: active
+run_id: a292e82dcb874b0e848dffc092bbcf1b
+run_name: wise-penguin-714
+run_uuid: a292e82dcb874b0e848dffc092bbcf1b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748012567693
+status: 3
+tags: []
+user_id: runner

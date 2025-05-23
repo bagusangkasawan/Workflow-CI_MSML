@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI_MSML/Workflow-CI_MSML/mlruns/0/510b0195c5e848afa426b088f1acd4f2/artifacts
+end_time: 1748012572001
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 510b0195c5e848afa426b088f1acd4f2
+run_name: powerful-sponge-732
+run_uuid: 510b0195c5e848afa426b088f1acd4f2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748012546438
+status: 3
+tags: []
+user_id: runner
