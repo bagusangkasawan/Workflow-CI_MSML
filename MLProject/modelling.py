@@ -30,9 +30,6 @@ rf_param_grid = {
 rf_model = RandomForestClassifier(random_state=42)
 grid_search = GridSearchCV(estimator=rf_model, param_grid=rf_param_grid, cv=3, n_jobs=-1, verbose=2)
 
-run = mlflow.active_run()
-run_id = run.info.run_id if run else None
-
 grid_search.fit(X_train, y_train)
 best_rf_model = grid_search.best_estimator_
 
@@ -67,6 +64,6 @@ mlflow.sklearn.log_model(
 print("✅ Model logged to MLflow.")
 
 artifact_path = os.path.join(os.getcwd(), "MLProject", "artifacts")
-artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts/"
+artifact_uri=f"./mlruns/{experiment_id}/None/artifacts/"
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")

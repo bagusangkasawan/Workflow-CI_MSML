@@ -21,7 +21,7 @@ jobs:
 
     - name: Run MLflow Project
       run: |
-        mlflow run MLProject --env-manager=conda
+        mlflow run MLProject
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
