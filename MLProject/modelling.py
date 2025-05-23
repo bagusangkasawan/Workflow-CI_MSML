@@ -30,12 +30,9 @@ rf_param_grid = {
 rf_model = RandomForestClassifier(random_state=42)
 grid_search = GridSearchCV(estimator=rf_model, param_grid=rf_param_grid, cv=3, n_jobs=-1, verbose=2)
 
-if mlflow.active_run() is None:
-    run = mlflow.start_run(run_name="Random Forest with Tuning")
-else:
-    run = mlflow.active_run()
+run = mlflow.active_run()
+run_id = run.info.run_id if run else None
 
-run_id = run.info.run_id
 grid_search.fit(X_train, y_train)
 best_rf_model = grid_search.best_estimator_
 
@@ -73,6 +70,3 @@ artifact_path = os.path.join(os.getcwd(), "artifacts")
 artifact_uri=f"./mlruns/{experiment_id}/{run_id}/artifacts/"
 mlflow.artifacts.download_artifacts(artifact_uri=artifact_uri, dst_path=artifact_path)
 print("✅ Model artifact downloaded.")
-
-if mlflow.active_run().info.run_id == run.info.run_id:
-    mlflow.end_run()
