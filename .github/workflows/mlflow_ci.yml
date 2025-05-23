@@ -7,29 +7,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  train-and-log-model:
+  train-log-and-dockerize:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-    - name: Build Docker image
+    - name: Install MLflow
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest MLProject
+        pip install mlflow
 
-    - name: Run modelling.py inside container (train model and download artifact)
+    - name: Run MLflow project
       run: |
-        docker run --rm \
-          -v ${{ github.workspace }}/MLProject/artifacts:/app/artifacts \
-          -v ${{ github.workspace }}:/app \
-          ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest \
-          bash -c "
-            conda run -n mlflow-env python MLProject/modelling.py
-          "
+        mlflow run MLProject
 
     - name: Commit and push model artifact to GitHub
       run: |
@@ -41,6 +37,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+    - name: Build Docker image from MLflow model
+      run: |
+        mlflow models build-docker -m MLProject/artifacts/random_forest_model -n msml-model
+
     - name: Push Docker image to Docker Hub
       run: |
+        docker tag msml-model:latest ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/msml-model:latest
