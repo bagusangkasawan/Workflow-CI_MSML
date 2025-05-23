@@ -57,7 +57,6 @@ def main():
         input_example=input_example,
         signature=signature
     )
-    
     print("✅ Model logged to MLflow.")
 
 if __name__ == "__main__":
